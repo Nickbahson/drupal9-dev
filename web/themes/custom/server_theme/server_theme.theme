@@ -1,0 +1,182 @@
+<?php
+
+/**
+ * @file
+ * Theme custom logic.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function server_theme_theme() {
+  $info = [];
+
+  $info['server_theme_tag'] = [
+    'variables' => [
+      'url' => NULL,
+      'title' => NULL,
+    ],
+  ];
+
+  // Simple card - vertical.
+  $info['server_theme_card'] = [
+    'variables' => [
+      'image' => NULL,
+      'title' => NULL,
+      'url' => NULL,
+      'body' => NULL,
+    ],
+  ];
+
+  // Simple card.
+  $info['server_theme_card__simple'] = [
+    'variables' => [
+      'image' => NULL,
+      'image_alt' => NULL,
+      'title' => NULL,
+      'url' => NULL,
+      'body' => NULL,
+      // A list of links.
+      'tags' => [],
+      'author' => NULL,
+    ],
+  ];
+
+  // Multiple cards.
+  $info['server_theme_cards'] = [
+    'variables' => [
+      // A list of cards.
+      'items' => [],
+    ],
+  ];
+
+  // "Call to action" paragraph type.
+  $info['server_theme_cta'] = [
+    'variables' => [
+      'title' => NULL,
+      'subtitle' => NULL,
+      'url' => NULL,
+      'url_title' => NULL,
+    ],
+  ];
+
+  // "Text" paragraph type.
+  $info['server_theme_text'] = [
+    'variables' => [
+      'title' => NULL,
+      'body' => NULL,
+    ],
+  ];
+
+  // Content tags.
+  $info['server_theme_content__tags'] = [
+    'variables' => [
+      // A list of links.
+      'tags' => [],
+    ],
+  ];
+
+  $info['server_theme_content__image_and_teaser'] = [
+    'variables' => [
+      'image' => NULL,
+      'image_alt' => NULL,
+      'teaser' => NULL,
+    ],
+  ];
+
+  // Content header (node's title and background image).
+  $info['server_theme_content__hero_header'] = [
+    'variables' => [
+      'title' => NULL,
+      'image' => NULL,
+    ],
+  ];
+
+  $info['server_theme_content__body'] = [
+    'variables' => [
+      'content' => NULL,
+    ],
+  ];
+
+  $info['server_theme_user_image'] = [
+    'variables' => [
+      'image' => NULL,
+      'image_alt' => NULL,
+      'initials' => NULL,
+    ],
+  ];
+
+  $info['server_theme_footer'] = [
+    'variables' => [],
+  ];
+
+  $info['server_theme_page_title'] = [
+    'variables' => [
+      'title' => NULL,
+    ],
+  ];
+
+  $info['server_theme_container_wide'] = [
+    'variables' => [
+      'element' => NULL,
+    ],
+  ];
+
+  $info['server_theme_hero_image'] = [
+    'variables' => [
+      'image' => NULL,
+      'title' => NULL,
+      'subtitle' => NULL,
+      'url' => NULL,
+      'url_title' => NULL,
+    ],
+  ];
+
+  $info['server_theme_button'] = [
+    'variables' => [
+      'url' => NULL,
+      'url_title' => NULL,
+    ],
+  ];
+
+  $info['server_theme_related_content'] = [
+    'variables' => [
+      'title' => NULL,
+      'items' => [],
+      'url' => NULL,
+      'url_title' => NULL,
+    ],
+  ];
+
+  return $info;
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function server_theme_preprocess_page(array &$variables) {
+  $variables['page']['footer'] = ['#theme' => 'server_theme_footer'];
+}
+
+/**
+ * Implements hook_preprocess_page_title().
+ *
+ * On node view pages, we'll take care of showing the page title (i.e. the
+ * <h1> element).
+ */
+function server_theme_preprocess_page_title(array &$variables) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+
+  if ($node) {
+    $variables['title'] = '';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_page_title_alter().
+ *
+ * Use our own page title theme.
+ */
+function server_theme_theme_suggestions_page_title_alter(array &$suggestions, array $variables) {
+  $suggestions[] = 'server_theme_page_title';
+}

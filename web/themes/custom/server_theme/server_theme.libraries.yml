@@ -1,0 +1,46 @@
+global-styling:
+  version: 1.0
+  css:
+    theme:
+      dist/css/style.css: {}
+
+global-scripts:
+  js:
+    dist/js/scripts.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+roboto:
+  css:
+    base:
+      '//fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap': { external: true }
+
+opensans:
+  css:
+    base:
+      '//fonts.googleapis.com/css?family=Open+Sans:400,400i,700': { external: true }
+
+font-awesome:
+  remote: https://fortawesome.github.io/Font-Awesome/
+  version: 4.7.0
+  license:
+    name: MIT
+    url: https://fortawesome.github.io/Font-Awesome/license/
+    gpl-compatible: true
+  css:
+    theme:
+      https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css: { type: external, minified: true }
+
+slick:
+  js:
+    /libraries/slick-carousel/slick/slick.js: {}
+    dist/js/slick-carousel.js: {}
+  css:
+    theme:
+      # Lower weight, as we'd want our custom css to be able to override slick's
+      # default CSS.
+      /libraries/slick-carousel/slick/slick.css: { weight: -10 }
+      /libraries/slick-carousel/slick/slick-theme.css: { weight: -9 }
+  dependencies:
+    - core/jquery
