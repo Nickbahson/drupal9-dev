@@ -1,0 +1,7 @@
+tailwind_view.people_cards:
+  path: '/style-guide'
+  defaults:
+    _controller: '\Drupal\tailwind_view\Controller\TailViewController::peopleCards'
+    _title: 'Person card'
+  requirements:
+    _permission: 'access content'

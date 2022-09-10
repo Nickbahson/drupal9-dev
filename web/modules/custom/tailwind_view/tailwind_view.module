@@ -1,0 +1,15 @@
+<?php
+/**
+ * Implements hook_theme().
+ */
+function tailwind_view_theme($existing, $type, $theme, $path) {
+  return [
+    'tailwind_view' => [
+      'render-element' => 'children',
+      'template' => 'tailwind-view',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
+  ];
+}

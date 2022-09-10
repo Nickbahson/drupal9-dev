@@ -1,0 +1,148 @@
+<div class="p-10 bg-gray-100  grid place-items-center min-h-screen">
+  <div class="max-w-sm max-h-96">
+    <div class="bg-white border border-gray-200 rounded-xl divide-y">
+      <div class="m-4 p-8">
+        <div class="flex items-center justify-center">
+          <img
+            class="w-25 h-25 rounded-full"
+            src="{{data.media_path}}user_avatar.png"
+            alt="user avatar"
+          >
+        </div>
+        <div id="description" class="flex items-center justify-center flex-col">
+          <div id="title" class="font-bold" title="Jane Cooper">
+            Jane Cooper
+          </div>
+          <div id="detail-badge" class="flex items-center justify-center flex-col">
+            <div id="detail" class="text-gray-500">
+              Paradigm Representative
+            </div>
+            <div id="badge">
+            <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-200 dark:text-green-900">
+              Admin
+            </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div id="actions" class="flex items-center justify-around">
+        <div id="email" class="flex items-center justify-center gap-2">
+          <span><img src="{{data.media_path}}email.svg"></span>
+          <span>Email</span>
+        </div>
+
+        <span id="divider"><img src="{{data.media_path}}divider.svg"></span>
+
+        <div id="call" class="flex items-center justify-center gap-2">
+          <span><img src="{{data.media_path}}phone.svg"></span>
+          <span>Call</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="font-bold m-4 p-2">Person Cards</div>
+  <div class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
+    {% for key, person in data.people %}
+      <div data-person-id="{{ key }}" class="bg-white border border-gray-200 rounded-xl divide-y">
+        <div class="m-4 p-8">
+          <div class="flex items-center justify-center">
+            <img
+              class="w-25 h-25 rounded-full"
+              src="{{data.media_path}}user_avatar.png"
+              alt="user avatar"
+            >
+          </div>
+          <div id="description" class="flex items-center justify-center flex-col">
+            <div id="title" class="font-bold" title="Jane Cooper">
+              Jane Cooper
+            </div>
+            <div id="detail-badge" class="flex items-center justify-center flex-col">
+              <div id="detail" class="text-gray-500">
+                Paradigm Representative
+              </div>
+              <div id="badge">
+            <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-200 dark:text-green-900">
+              Admin
+            </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div id="actions" class="flex items-center justify-around">
+          <div id="email" class="flex items-center justify-center gap-2">
+            <span><img src="{{data.media_path}}email.svg"></span>
+            <span>Email</span>
+          </div>
+
+          <span id="divider"><img src="{{data.media_path}}divider.svg"></span>
+
+          <div id="call" class="flex items-center justify-center gap-2">
+            <span><img src="{{data.media_path}}phone.svg"></span>
+            <span>Call</span>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<!-- Not working, eliminated some divs @ above -->
+{#<div class="wrapper bg-gray-500 flex items-center justify-center">#}
+{#  <div id="person" class="bg-white mt-8 rounded divide-y">#}
+
+{#    <div id="leading-content">#}
+
+{#      <div id="avatar" class="w-full h-full">#}
+{#        class="w-full h-full object-cover"#}
+{#        <img#}
+{#          src="{{data.media_path}}user_avatar.png"#}
+{#          alt="user avatar"#}
+{#        >#}
+{#      </div>#}
+
+{#      <div id="description" class="flex">#}
+{#        <div id="title" class="font-bold" title="Jane Cooper">#}
+{#          Jane Cooper#}
+{#        </div>#}
+{#        <div id="detail-badge" class="flex">#}
+{#          <div id="detail" class="text-gray-500">#}
+{#            Paradigm Representative#}
+{#          </div>#}
+{#          <div id="badge">#}
+{#            <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-200 dark:text-green-900">#}
+{#              Admin#}
+{#            </span>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+
+{#    </div>#}
+
+{#    <div id="actions" class="flex justify-around divide-x">#}
+{#      <div id="email" class="flex items-center justify-center gap-2">#}
+{#        <span><img src="{{data.media_path}}email.svg"></span>#}
+{#        <span>Email</span>#}
+{#      </div>#}
+
+{#      <span id="divider"><img src="{{data.media_path}}divider.svg"></span>#}
+{#      <div id="divider" class="bg-red-500 h-4 w-6"></div>#}
+
+{#      <div id="call" class="flex items-center justify-center gap-2">#}
+{#        <span><img src="{{data.media_path}}phone.svg"></span>#}
+{#        <span>Call</span>#}
+{#      </div>#}
+{#    </div>#}
+
+{#  </div>#}
+
+{#  <div id="people">#}
+
+{#  </div>#}
+
+{#</div>#}

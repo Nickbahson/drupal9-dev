@@ -1,0 +1,4 @@
+name: Tailwind View
+type: module
+description: 'Provides a view build on tailwind css.'
+core_version_requirement: ^8 || ^9 || ^10

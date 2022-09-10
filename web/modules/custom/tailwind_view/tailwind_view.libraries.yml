@@ -1,0 +1,5 @@
+tailwind_cdn:
+  version: VERSION
+  header: true
+  js:
+    //cdn.tailwindcss.com: { type: external, attributes: { } }
