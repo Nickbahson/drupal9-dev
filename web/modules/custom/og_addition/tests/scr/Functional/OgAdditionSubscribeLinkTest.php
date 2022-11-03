@@ -12,18 +12,6 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
 class OgAdditionSubscribeLinkTest extends ExistingSiteBase {
 
   /**
-   * {@inheritdoc}
-   */
-  public static $modules = [
-    'node', 'og', 'og_ui', 'server_general', 'og_addition',
-  ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'server_theme';
-
-  /**
    * Test normal functionality that comes with og module.
    *
    *  For admins.
@@ -49,19 +37,16 @@ class OgAdditionSubscribeLinkTest extends ExistingSiteBase {
     $this->drupalGet($node->toUrl());
     $this->assertSession()->statusCodeEquals(200);
 
-    $name = $user->getDisplayName();
-    $group_name = $node->label();
-
-    $text = "Hi $name, you're already subscribed to this group called, $group_name, click here if you would like to unsubscribe.";
-
-    $this->assertSession()->elementTextContains('css', '.unsubscribe', $text);
+    // Test group owners/creator.
+    $this->assertSession()->elementTextContains('css', '.group', 'You are the group manager');
+    $this->assertSession()->elementTextContains('css', '.manager', 'You are the group manager');
 
   }
 
   /**
    * Tests if content author is already subscribed.
    */
-  public function testAuthorIsSubscribed() {
+  public function testGroupAuthorDefaults() {
     $author = $this->createUser([], NULL, FALSE);
     $node = $this->createNode([
       'title' => 'Football is a great sports too',
@@ -73,12 +58,9 @@ class OgAdditionSubscribeLinkTest extends ExistingSiteBase {
     $this->drupalLogin($author);
     $this->drupalGet($node->toUrl());
 
-    $this->assertSession()->pageTextContains($author->getAccountName());
-    $name = $author->getAccountName();
-    $group_name = $node->label();
-
-    $text = "Hi $name, you're already subscribed to this group called, $group_name, click here if you would like to unsubscribe.";
-    $this->assertSession()->pageTextContains($text);
+    // Group owners/creator already subscribed.
+    $this->assertSession()->elementTextContains('css', '.group', 'You are the group manager');
+    $this->assertSession()->elementTextContains('css', '.manager', 'You are the group manager');
   }
 
   /**
@@ -102,9 +84,9 @@ class OgAdditionSubscribeLinkTest extends ExistingSiteBase {
     $name = $another_user->getAccountName();
     $group_name = $node->label();
 
-    $text = "Hi $name, click here if you would like to subscribe to this group called $group_name.";
-    $this->assertSession()->elementTextContains('css', '.subscribe', $text);
-    $this->assertSession()->pageTextContains($text);
+    $sub_text = "Hi $name, click here if you would like to subscribe to this group called $group_name.";
+    $this->assertSession()->elementTextContains('css', '.subscribe', $sub_text);
+    $this->assertSession()->pageTextContains($sub_text);
 
     // Subscribe another user.
     // Go to subscription page.
@@ -119,8 +101,21 @@ class OgAdditionSubscribeLinkTest extends ExistingSiteBase {
     $sub_form->findButton('edit-submit')->click();
 
     // Already subscribed.
-    $text = "Hi $name, you're already subscribed to this group called, $group_name, click here if you would like to unsubscribe.";
-    $this->assertSession()->pageTextContains($text);
+    $unsub_text = "Hi $name, you're already subscribed to this group called, $group_name, click here if you would like to unsubscribe.";
+    $this->assertSession()->pageTextContains($unsub_text);
+
+    // Already subscribed user can unsubscribe.
+    // Got to unsubscribe page.
+    $this->getCurrentPage()->findLink('og_group')
+      ->click();
+
+    // Unsubscribe to this group.
+    $sub_form = $this->getCurrentPage()->findById('og-unsubscribe-confirm-form');
+    $sub_form->findButton('edit-submit')->click();
+
+    // Should show same message like before user had subscribed.
+    $this->assertSession()->elementTextContains('css', '.subscribe', $sub_text);
+    $this->assertSession()->pageTextContains($sub_text);
 
   }
 
