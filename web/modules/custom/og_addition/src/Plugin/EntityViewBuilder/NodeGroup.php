@@ -11,6 +11,7 @@ use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\og\OgMembershipInterface;
+use Drupal\og\MembershipManagerInterface;
 use Drupal\server_general\EntityDateTrait;
 use Drupal\server_general\EntityViewBuilder\NodeViewBuilderAbstract;
 use Drupal\server_general\TitleAndLabelsTrait;
@@ -38,6 +39,13 @@ class NodeGroup extends NodeViewBuilderAbstract {
   protected $ogAccess;
 
   /**
+   * The OG membership_manager service.
+   *
+   * @var \Drupal\og\MembershipManagerInterface
+   */
+  protected $ogMembershipManager;
+
+  /**
    * Constructs a new NodeGroup view plugin object.
    *
    * @param array $configuration
@@ -52,10 +60,13 @@ class NodeGroup extends NodeViewBuilderAbstract {
    *   The current user.
    * @param \Drupal\og\OgAccessInterface $og_access
    *   The OG access service.
+   * @param \Drupal\og\MembershipManagerInterface $og_membership_manager
+   *   The OG membership_manager service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, OgAccessInterface $og_access) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, OgAccessInterface $og_access, MembershipManagerInterface $og_membership_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $current_user);
     $this->ogAccess = $og_access;
+    $this->ogMembershipManager = $og_membership_manager;
   }
 
   /**
@@ -68,7 +79,8 @@ class NodeGroup extends NodeViewBuilderAbstract {
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('current_user'),
-      $container->get('og.access')
+      $container->get('og.access'),
+      $container->get('og.membership_manager'),
     );
   }
 
@@ -163,13 +175,6 @@ class NodeGroup extends NodeViewBuilderAbstract {
 
       return $this->wrapContainerWide($og_item);
     }
-    $storage = $this->entityTypeManager->getStorage('og_membership');
-    $props = [
-      'uid' => $user ? $user->id() : 0,
-      'entity_type' => $entity->getEntityTypeId(),
-      'entity_bundle' => $entity->bundle(),
-      'entity_id' => $entity->id(),
-    ];
 
     $options = [];
     $attr_class = [];
@@ -181,9 +186,13 @@ class NodeGroup extends NodeViewBuilderAbstract {
       'group' => $entity->id(),
     ];
 
-    $memberships = $storage->loadByProperties($props);
-    /** @var \Drupal\og\OgMembershipInterface $membership */
-    $membership = reset($memberships);
+    $active_sub_state = [
+      OgMembershipInterface::STATE_ACTIVE,
+      OgMembershipInterface::STATE_PENDING,
+    ];
+
+    $membership = $this->ogMembershipManager->getMembership($entity, $user->id(), $active_sub_state);
+
     if ($membership) {
       if ($membership->isBlocked()) {
         // If user is blocked, they should not be able to apply for
