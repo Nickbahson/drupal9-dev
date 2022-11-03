@@ -3,6 +3,7 @@
 namespace Drupal\server_style_guide\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Extension\ThemeHandler;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGenerator;
 use Drupal\pluggable_entity_view_builder\BuildFieldTrait;
@@ -30,10 +31,18 @@ class StyleGuideController extends ControllerBase {
   protected $linkGenerator;
 
   /**
+   * The module handler Drupal service.
+   *
+   * @var \Drupal\Core\Extension\ThemeHandler
+   */
+  protected $themeHandler;
+
+  /**
    * Class constructor.
    */
-  public function __construct(LinkGenerator $link_generator) {
+  public function __construct(LinkGenerator $link_generator, ThemeHandler $theme_handler) {
     $this->linkGenerator = $link_generator;
+    $this->themeHandler = $theme_handler;
   }
 
   /**
@@ -41,7 +50,8 @@ class StyleGuideController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new self(
-      $container->get('link_generator')
+      $container->get('link_generator'),
+      $container->get('theme_handler')
     );
   }
 
@@ -86,6 +96,9 @@ class StyleGuideController extends ControllerBase {
 
     $element = $this->getCards();
     $build[] = $this->wrapElementWideContainer($element, 'Cards');
+
+    $element = $this->getPersonCards();
+    $build[] = $this->wrapElementWideContainer($element, 'Person Card');
 
     $element = $this->getTags();
     $build[] = $this->wrapElementWideContainer($element, 'Tags');
@@ -270,6 +283,42 @@ class StyleGuideController extends ControllerBase {
       '#title' => $this->t('Lorem ipsum dolor sit amet'),
       '#subtitle' => $this->t('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
       '#button' => $button,
+    ];
+  }
+
+  /**
+   * Get person cards.
+   *
+   * @return array
+   *   Render array.
+   */
+  protected function getPersonCards(): array {
+    $media_path = $this->themeHandler
+      ->getTheme('server_theme')->getPath();
+    $media_path = $media_path . '/src/images/';
+    $card = [
+      '#theme' => 'server_theme_person_card',
+      '#media_path' => $media_path,
+      '#person_data' => [],
+    ];
+
+    $card_two = $card;
+    $another_card = $card;
+
+    $items = [
+      $card,
+      $card_two,
+      $card,
+      $card,
+      $another_card,
+    ];
+
+    // Just double the $items (5) for now.
+    $items = array_merge($items, $items);
+
+    return [
+      '#theme' => 'server_theme_person_cards',
+      '#items' => $items,
     ];
   }
 
