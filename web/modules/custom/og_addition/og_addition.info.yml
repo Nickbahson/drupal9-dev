@@ -1,0 +1,9 @@
+name: Og addition
+type: module
+description: "Organic groups additions, to refine the functionality as per the client's specifics"
+core_version_requirement: ^8 || ^9
+package: Organic Groups
+
+dependencies:
+  - og_ui:og_ui
+  - server_general:server_general
